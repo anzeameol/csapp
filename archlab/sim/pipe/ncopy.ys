@@ -1,0 +1,174 @@
+#/* $begin ncopy-ys */
+##################################################################
+# ncopy.ys - Copy a src block of len words to dst.
+# Return the number of positive words (>0) contained in src.
+#
+# Include your name and ID here.
+#
+# Describe how and why you modified the baseline code.
+#
+##################################################################
+# Do not modify this portion
+# Function prologue.
+# %rdi = src, %rsi = dst, %rdx = len
+ncopy:
+
+##################################################################
+# You can modify this portion
+	# Loop header
+	xorq %rax,%rax
+Loop1:
+	iaddq $-8,%rdx
+	jge do1
+	jmp fix1
+do1:
+	mrmovq (%rdi), %r8
+	mrmovq 8(%rdi), %r9
+	mrmovq 16(%rdi), %r10
+	mrmovq 24(%rdi), %r11
+	mrmovq 32(%rdi), %r12
+	mrmovq 40(%rdi), %r13
+	mrmovq 48(%rdi), %r14
+	mrmovq 56(%rdi), %rcx
+	rmmovq %r8, (%rsi)
+	rmmovq %r9, 8(%rsi)
+	rmmovq %r10, 16(%rsi)
+	rmmovq %r11, 24(%rsi)
+	rmmovq %r12, 32(%rsi)
+	rmmovq %r13, 40(%rsi)
+	rmmovq %r14, 48(%rsi)
+	rmmovq %rcx, 56(%rsi)
+
+	andq %r8, %r8
+	jle nop11
+	iaddq $1,%rax
+nop11:
+
+	andq %r9, %r9
+	jle nop12
+	iaddq $1,%rax
+nop12:
+
+	andq %r10, %r10
+	jle nop13
+	iaddq $1,%rax
+nop13:
+
+	andq %r11, %r11
+	jle nop14
+	iaddq $1,%rax
+nop14:
+
+	andq %r12, %r12
+	jle nop15
+	iaddq $1,%rax
+nop15:
+
+	andq %r13, %r13
+	jle nop16
+	iaddq $1,%rax
+nop16:
+
+	andq %r14, %r14
+	jle nop17
+	iaddq $1,%rax
+nop17:
+
+	andq %rcx, %rcx
+	jle nop18
+	iaddq $1,%rax
+nop18:
+
+	iaddq $64, %rdi
+	iaddq $64, %rsi
+	jmp Loop1
+fix1:
+	iaddq $8,%rdx
+
+Loop2:
+	iaddq $-4,%rdx
+	jl fix2
+
+	mrmovq (%rdi), %r8
+	mrmovq 8(%rdi), %r9
+	mrmovq 16(%rdi), %r10
+	mrmovq 24(%rdi), %r11
+	rmmovq %r8, (%rsi)
+	rmmovq %r9, 8(%rsi)
+	rmmovq %r10, 16(%rsi)
+	rmmovq %r11, 24(%rsi)
+
+	andq %r8, %r8
+	jle nop21
+	iaddq $1,%rax
+nop21:
+
+	andq %r9, %r9
+	jle nop22
+	iaddq $1,%rax
+nop22:
+
+	andq %r10, %r10
+	jle nop23
+	iaddq $1,%rax
+nop23:
+
+	andq %r11, %r11
+	jle nop24
+	iaddq $1,%rax
+nop24:
+
+	iaddq $32, %rdi
+	iaddq $32, %rsi
+	jmp Loop2
+fix2:
+	iaddq $4,%rdx
+
+Loop3:
+	iaddq $-2,%rdx
+	jl fix3
+
+	mrmovq (%rdi), %r8
+	mrmovq 8(%rdi), %r9
+	rmmovq %r8, (%rsi)
+	rmmovq %r9, 8(%rsi)
+
+	andq %r8, %r8
+	jle nop31
+	iaddq $1,%rax
+nop31:
+
+	andq %r9, %r9
+	jle nop32
+	iaddq $1,%rax
+nop32:
+
+	iaddq $16, %rdi
+	iaddq $16, %rsi
+	jmp Loop3
+fix3:
+	iaddq $2,%rdx
+
+Loopf:
+	iaddq $-1,%rdx
+	jl Done
+
+	mrmovq (%rdi), %r10
+	iaddq $8, %rdi
+	rmmovq %r10, (%rsi)
+	andq %r10, %r10
+	jle nopf
+	iaddq $1,%rax
+nopf:
+
+	iaddq $8, %rsi
+	jmp Loopf
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+	ret
+##################################################################
+# Keep the following label at the end of your function
+End:
+#/* $end ncopy-ys */
